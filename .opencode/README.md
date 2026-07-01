@@ -1,75 +1,40 @@
-# OpenCode Cost Predictor MVP
+# OpenCode Cost Predictor Home UI
 
-This repo contains a project-local OpenCode plugin for rich-mode trace collection.
+This repo currently contains a project-local OpenCode TUI plugin focused on one
+form factor: a persistent home-screen status line shown before the user sends a
+prompt.
 
 The plugin lives at:
 
 ```text
-.opencode/plugins/cost-predictor.mjs
+.opencode/plugins/cost-predictor-home.tsx
 ```
 
-It is enabled by the project-local config:
+It is enabled by:
 
 ```text
-.opencode/opencode.json
+.opencode/tui.json
 ```
 
-It stores traces outside the repo in a global local SQLite database:
+## Current UI
+
+The plugin renders this placeholder line on OpenCode's home screen:
 
 ```text
-~/.local/share/opencode-cost-predictor/traces.sqlite
+model score: X | task-aware model score: Y | task-aware predicted cost: Z
 ```
 
-Use `OPENCODE_COST_PREDICTOR_HOME=/some/path` to override the storage location for tests.
+The line is intentionally centered under the home prompt.
 
-## What It Captures
+## Deferred Data Sources
 
-- OpenCode events visible to project plugins
-- observed shell commands from tool/command event payloads
-- terminal labeling triggers for:
-  - `git commit`
-  - `gh pr create`
-  - `gh pr ready`
-  - `gh pr edit --draft=false` / `--ready`
-  - session idle/closure events when OpenCode emits them
-- file paths visible in event payloads
-- git metadata for the project at write time
+The current values are static placeholders. The intended data flow is:
 
-Terminal records start as:
+- `model score`: fetched from an authoritative benchmark or model scoring source
+  for software development tasks.
+- `task-aware model score`: computed from the selected model plus current prompt
+  or task context.
+- `task-aware predicted cost`: computed from the selected model, prompt/task
+  features, repo context, and historical task traces.
 
-```text
-outcome = awaiting_label
-label_source = pending_user
-```
-
-## Label A Pending Session
-
-```bash
-python3 .opencode/cost-predictor/store.py label \
-  --project-dir "$(pwd)" \
-  --outcome success
-```
-
-Valid outcomes:
-
-```text
-success partial failed abandoned
-```
-
-## Inspect Stored Data
-
-```bash
-python3 .opencode/cost-predictor/store.py path
-python3 .opencode/cost-predictor/store.py pending
-python3 .opencode/cost-predictor/store.py show
-```
-
-## Infer Stale Pending Labels
-
-Option B keeps sessions pending until the user labels them. To apply fallback inference only to old unanswered records:
-
-```bash
-python3 .opencode/cost-predictor/store.py infer-stale --older-than-hours 24
-```
-
-This changes only `awaiting_label` records with `label_source = pending_user`.
+Those data sources are deliberately out of scope for this UI-only form factor.

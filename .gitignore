@@ -1,6 +1,6 @@
 .DS_Store
 node_modules/
-.opencode-cost/
-*.sqlite
-*.sqlite-shm
-*.sqlite-wal
+.opencode/.gitignore
+.opencode/node_modules/
+.opencode/package.json
+.opencode/package-lock.json
