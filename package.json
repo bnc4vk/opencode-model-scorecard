@@ -1,6 +1,6 @@
 {
   "name": "opencode-cost-predictor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenCode TUI plugin that displays local benchmark scores, token costs, and token efficiency on the home screen.",
   "private": false,
   "type": "module",
@@ -12,6 +12,14 @@
     "model-benchmarks",
     "coding-agent"
   ],
+  "homepage": "https://github.com/bnc4vk/opencode-cost-predictor#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bnc4vk/opencode-cost-predictor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bnc4vk/opencode-cost-predictor/issues"
+  },
   "exports": {
     ".": "./tui.tsx",
     "./tui": "./tui.tsx"
